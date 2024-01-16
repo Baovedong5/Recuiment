@@ -11,8 +11,10 @@ import {
 } from "react-router-dom";
 
 import style from "styles/app.module.scss";
-import { useAppDispatch } from "./redux/hook";
+import { useAppDispatch, useAppSelector } from "./redux/hook";
 import { fetchAccount } from "./redux/slice/accountSlice";
+import Loading from "./components/share/loading";
+import NotFound from "./components/share/notFound";
 
 const LayoutClient = () => {
   const location = useLocation();
@@ -36,6 +38,9 @@ const LayoutClient = () => {
 
 function App() {
   const dispatch = useAppDispatch();
+  const isAuthentocated = useAppSelector(
+    (state) => state.account.isAuthenticated
+  );
 
   useEffect(() => {
     if (
@@ -50,6 +55,7 @@ function App() {
     {
       path: "/",
       element: <LayoutClient />,
+      errorElement: <NotFound />,
     },
     {
       path: "/login",
@@ -63,7 +69,13 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router} />
+      {isAuthentocated === true ||
+      window.location.pathname === "/login" ||
+      window.location.pathname === "/register" ? (
+        <RouterProvider router={router} />
+      ) : (
+        <Loading />
+      )}
     </>
   );
 }
