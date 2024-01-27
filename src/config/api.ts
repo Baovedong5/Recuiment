@@ -32,3 +32,7 @@ export const callRegister = (
     address,
   });
 };
+
+export const callLogout = () => {
+  return axios.post<IBackendRes<string>>("/api/v1/auth/logout");
+};

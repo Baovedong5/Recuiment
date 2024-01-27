@@ -68,6 +68,20 @@ export const accountSlice = createSlice({
       state.user.role = action?.payload?.role;
       state.user.permissions = action?.payload?.permissions;
     },
+    setLogoutAction: (state, action) => {
+      localStorage.removeItem("access_token");
+      state.isAuthenticated = false;
+      state.user = {
+        _id: "",
+        email: "",
+        name: "",
+        role: {
+          _id: "",
+          name: "",
+        },
+        permissions: [],
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -98,6 +112,7 @@ export const accountSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setActiveMenu, setUserLoginInfo } = accountSlice.actions;
+export const { setActiveMenu, setUserLoginInfo, setLogoutAction } =
+  accountSlice.actions;
 
 export default accountSlice.reducer;

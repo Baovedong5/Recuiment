@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from "./redux/hook";
 import { fetchAccount } from "./redux/slice/accountSlice";
 import Loading from "./components/share/loading";
 import NotFound from "./components/share/notFound";
+import HomePage from "./pages/home";
 
 const LayoutClient = () => {
   const location = useLocation();
@@ -38,9 +39,7 @@ const LayoutClient = () => {
 
 function App() {
   const dispatch = useAppDispatch();
-  const isAuthentocated = useAppSelector(
-    (state) => state.account.isAuthenticated
-  );
+  const isLoading = useAppSelector((state) => state.account.isLoading);
 
   useEffect(() => {
     if (
@@ -56,6 +55,12 @@ function App() {
       path: "/",
       element: <LayoutClient />,
       errorElement: <NotFound />,
+      children: [
+        {
+          index: true,
+          element: <HomePage />,
+        },
+      ],
     },
     {
       path: "/login",
@@ -69,9 +74,10 @@ function App() {
 
   return (
     <>
-      {isAuthentocated === true ||
+      {isLoading === false ||
       window.location.pathname === "/login" ||
-      window.location.pathname === "/register" ? (
+      window.location.pathname === "/register" ||
+      window.location.pathname === "/" ? (
         <RouterProvider router={router} />
       ) : (
         <Loading />
